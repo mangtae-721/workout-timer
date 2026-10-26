@@ -181,3 +181,69 @@ input[type="number"] { -moz-appearance: textfield; }
 .confirm::backdrop { background: rgb(0 0 0 / 0.6); }
 .confirm p { margin: 0 0 18px; font-size: 1.15rem; text-align: center; line-height: 1.5; white-space: pre-line; }
 .confirm-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* 진행 화면 */
+.run {
+  --run-bg: #333;
+  --run-fg: #fff;
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--run-bg);
+  color: var(--run-fg);
+  padding: calc(14px + env(safe-area-inset-top)) 16px calc(18px + env(safe-area-inset-bottom));
+  transition: background-color 0.25s;
+  user-select: none;
+}
+.run[data-kind="prep"] { --run-bg: #f5b700; --run-fg: #1a1400; }
+.run[data-kind="work"] { --run-bg: #e5383b; }
+.run[data-kind="rest"] { --run-bg: #23a050; }
+.run[data-kind="cycleRest"] { --run-bg: #2f6fde; }
+.run[data-kind="done"] { --run-bg: #121214; }
+
+.run-name { text-align: center; font-size: 1.05rem; opacity: 0.85; min-height: 1.4em; }
+.run-note {
+  align-self: center;
+  margin-top: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.25);
+  font-size: 0.9rem;
+}
+
+.run-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1vh;
+  text-align: center;
+}
+
+.run-phase { font-size: clamp(1.6rem, 9vw, 3.2rem); font-weight: 800; letter-spacing: 0.04em; }
+
+.run-time {
+  font-size: min(34vw, 42vh);
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.run-time[data-len="5"] { font-size: min(28vw, 38vh); }
+.run-time[data-len="7"], .run-time[data-len="8"] { font-size: min(19vw, 30vh); }
+
+.run-info { font-size: clamp(1.1rem, 5.5vw, 1.8rem); font-weight: 600; opacity: 0.92; }
+
+.run-bottom { display: flex; gap: 10px; }
+.run-button {
+  flex: 1;
+  min-height: 60px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  background: rgb(0 0 0 / 0.22);
+  color: inherit;
+}
+.run-button.strong { background: var(--accent); color: var(--accent-text); }
+.run[data-kind="done"] .run-button:not(.strong) { background: var(--surface-2); }

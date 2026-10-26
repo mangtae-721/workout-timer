@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#121214">
   <title>운동 타이머</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon-192.png">
   <link rel="stylesheet" href="style.css">
   <script type="module" src="app.js"></script>
 </head>
@@ -86,6 +88,32 @@
     <button id="edit-save" class="primary wide" type="submit">저장</button>
     <button id="edit-delete" class="danger-text wide" type="button" hidden>이 타이머 지우기</button>
   </form>
+
+  <section id="run-screen" class="run" hidden>
+    <div id="run-name" class="run-name"></div>
+    <div id="run-note" class="run-note" hidden>화면이 꺼질 수 있어요</div>
+    <div class="run-center">
+      <div id="run-phase" class="run-phase"></div>
+      <div id="run-time" class="run-time"></div>
+      <div id="run-info" class="run-info"></div>
+    </div>
+    <div class="run-bottom">
+      <button id="run-stop" class="run-button" type="button">그만하기</button>
+      <button id="run-pause" class="run-button" type="button">일시정지</button>
+    </div>
+  </section>
+
+  <section id="done-screen" class="run" data-kind="done" hidden>
+    <div id="done-name" class="run-name"></div>
+    <div class="run-center">
+      <div class="run-time">끝!</div>
+      <div class="run-info">수고하셨어요</div>
+    </div>
+    <div class="run-bottom">
+      <button id="done-again" class="run-button" type="button">다시 하기</button>
+      <button id="done-list" class="run-button strong" type="button">목록으로</button>
+    </div>
+  </section>
 
   <dialog id="confirm" class="confirm">
     <p id="confirm-text"></p>

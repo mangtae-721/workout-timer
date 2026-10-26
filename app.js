@@ -1,5 +1,6 @@
 // 운동 타이머 화면: 목록, 만들기·고치기.
 
+import { setupRun, startRun } from "./run.js";
 import { askPersist, createStore } from "./store.js";
 
 const LIMITS = {
@@ -92,6 +93,7 @@ function renderList() {
     summary.className = "timer-summary";
     summary.textContent = summaryText(t);
     start.append(name, summary);
+    start.addEventListener("click", () => startRun(t, { show, displayName, confirm: confirmBox }));
     const edit = document.createElement("button");
     edit.type = "button";
     edit.className = "timer-edit";
@@ -106,8 +108,9 @@ function renderList() {
 // ── 만들기·고치기 화면 ──
 
 function show(screen) {
-  $("list-screen").hidden = screen !== "list";
-  $("edit-screen").hidden = screen !== "edit";
+  for (const name of ["list", "edit", "run", "done"]) {
+    $(`${name}-screen`).hidden = screen !== name;
+  }
   window.scrollTo(0, 0);
 }
 
@@ -229,6 +232,7 @@ function init() {
   $("edit-screen").addEventListener("submit", save);
   $("edit-delete").addEventListener("click", removeTimer);
   setupSteppers();
+  setupRun();
   loadList();
 }
 
