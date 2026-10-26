@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#121214">
+  <title>운동 타이머</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <main id="list-screen" class="screen">
+    <header class="bar">
+      <h1>운동 타이머</h1>
+    </header>
+    <p id="list-message" class="message" hidden></p>
+    <ul id="timer-list" class="timer-list"></ul>
+    <p id="empty" class="empty" hidden>아직 저장한 타이머가 없어요.<br>아래 버튼으로 첫 타이머를 만들어 보세요.</p>
+    <button id="new-timer" class="primary wide" type="button">+ 새 타이머 만들기</button>
+  </main>
+
+  <form id="edit-screen" class="screen" hidden novalidate>
+    <header class="bar">
+      <button id="edit-cancel" class="ghost" type="button">← 목록</button>
+      <h1 id="edit-title">새 타이머</h1>
+    </header>
+
+    <label class="field">
+      <span class="label">이름</span>
+      <input id="f-name" type="text" maxlength="40" autocomplete="off" placeholder="비우면 자동으로 붙어요">
+    </label>
+
+    <fieldset class="field">
+      <legend class="label">운동 시간</legend>
+      <div class="hms">
+        <label><input id="f-work-h" type="number" inputmode="numeric" min="0" max="99"><span>시</span></label>
+        <label><input id="f-work-m" type="number" inputmode="numeric" min="0" max="59"><span>분</span></label>
+        <label><input id="f-work-s" type="number" inputmode="numeric" min="0" max="59"><span>초</span></label>
+      </div>
+    </fieldset>
+
+    <div class="row2">
+      <fieldset class="field">
+        <legend class="label">라운드 수</legend>
+        <div class="stepper" data-for="f-rounds">
+          <button type="button" data-step="-1" aria-label="라운드 줄이기">−</button>
+          <input id="f-rounds" type="number" inputmode="numeric" min="1" max="99">
+          <button type="button" data-step="1" aria-label="라운드 늘리기">+</button>
+        </div>
+      </fieldset>
+      <fieldset class="field">
+        <legend class="label">사이클 수</legend>
+        <div class="stepper" data-for="f-cycles">
+          <button type="button" data-step="-1" aria-label="사이클 줄이기">−</button>
+          <input id="f-cycles" type="number" inputmode="numeric" min="1" max="99">
+          <button type="button" data-step="1" aria-label="사이클 늘리기">+</button>
+        </div>
+      </fieldset>
+    </div>
+
+    <fieldset class="field">
+      <legend class="label">라운드 사이 휴식 <small>0이면 건너뜀</small></legend>
+      <div class="hms">
+        <label><input id="f-roundRest-m" type="number" inputmode="numeric" min="0" max="99"><span>분</span></label>
+        <label><input id="f-roundRest-s" type="number" inputmode="numeric" min="0" max="59"><span>초</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset class="field">
+      <legend class="label">사이클 사이 휴식 <small>0이면 건너뜀</small></legend>
+      <div class="hms">
+        <label><input id="f-cycleRest-m" type="number" inputmode="numeric" min="0" max="99"><span>분</span></label>
+        <label><input id="f-cycleRest-s" type="number" inputmode="numeric" min="0" max="59"><span>초</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset class="field">
+      <legend class="label">시작 전 준비 시간 <small>0이면 바로 시작</small></legend>
+      <div class="hms">
+        <label><input id="f-prep-m" type="number" inputmode="numeric" min="0" max="99"><span>분</span></label>
+        <label><input id="f-prep-s" type="number" inputmode="numeric" min="0" max="59"><span>초</span></label>
+      </div>
+    </fieldset>
+
+    <p id="edit-message" class="message" hidden></p>
+    <button id="edit-save" class="primary wide" type="submit">저장</button>
+    <button id="edit-delete" class="danger-text wide" type="button" hidden>이 타이머 지우기</button>
+  </form>
+
+  <dialog id="confirm" class="confirm">
+    <p id="confirm-text"></p>
+    <div class="confirm-buttons">
+      <button id="confirm-no" class="secondary" type="button">아니요</button>
+      <button id="confirm-yes" class="primary" type="button"></button>
+    </div>
+  </dialog>
+</body>
+</html>
