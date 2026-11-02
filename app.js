@@ -1,7 +1,7 @@
-// 운동 타이머 화면: 목록, 만들기·고치기.
+// 운동 타이머 화면: 목록, 만들기·고치기, 복원 링크.
 
 import { setupRun, startRun } from "./run.js";
-import { askPersist, createStore } from "./store.js";
+import { askPersist, createStore, fromBackup, mergeTimers, toBackup } from "./store.js";
 
 const LIMITS = {
   work: [1, 99 * 3600 + 59 * 60 + 59],
@@ -103,6 +103,56 @@ function renderList() {
     ul.append(li);
   }
   $("empty").hidden = timers.length > 0;
+  $("backup").hidden = timers.length === 0;
+  showMessage($("backup-info"), "");
+}
+
+// ── 복원 링크 ──
+
+async function shareBackup() {
+  const url = `${location.origin}${location.pathname}#restore=${toBackup(timers)}`;
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: "운동 타이머 복원 링크", text: "타이머가 사라지면 이 링크를 크롬에서 열어 주세요.", url });
+      return;
+    } catch (e) {
+      if (e.name === "AbortError") return;
+    }
+  }
+  let copied = false;
+  try {
+    await navigator.clipboard.writeText(url);
+    copied = true;
+  } catch {
+    // 아래 안내에 링크를 그대로 보여 준다
+  }
+  showMessage($("backup-info"), `${copied ? "링크를 복사했어요. " : ""}이 링크를 보관해 두세요:
+${url}`);
+}
+
+// 주소에 #restore=가 있으면 한 번 묻고, 목록에 없는 타이머만 더한다.
+async function restoreFromLink() {
+  const m = location.hash.match(/^#restore=(.*)$/);
+  if (!m) return;
+  history.replaceState(null, "", location.pathname + location.search);
+  const info = $("list-info");
+  const incoming = fromBackup(m[1]);
+  if (!incoming || !incoming.length) {
+    showMessage(info, "복원 링크를 읽지 못했어요. 링크가 잘리지 않았는지 확인해 주세요.");
+    return;
+  }
+  if (!(await confirmBox(`링크에 담긴 타이머 ${incoming.length}개를 불러올까요?
+지금 있는 타이머는 그대로 둬요.`, "불러오기"))) return;
+  const { next, added } = mergeTimers(timers, incoming);
+  if (added && !saveAll(next)) {
+    showMessage(info, "불러오지 못했어요. 링크를 다시 열어 주세요.");
+    return;
+  }
+  renderList();
+  const kept = incoming.length - added;
+  showMessage(info, added
+    ? `${added}개를 불러왔어요.${kept ? ` 이미 있던 ${kept}개는 그대로 두었어요.` : ""}`
+    : "링크의 타이머가 이미 모두 목록에 있어요.");
 }
 
 // ── 만들기·고치기 화면 ──
@@ -232,8 +282,10 @@ function init() {
   $("edit-screen").addEventListener("submit", save);
   $("edit-delete").addEventListener("click", removeTimer);
   setupSteppers();
+  $("backup-link").addEventListener("click", shareBackup);
   setupRun();
   loadList();
+  restoreFromLink();
 }
 
 init();

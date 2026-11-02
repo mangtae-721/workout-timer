@@ -73,6 +73,19 @@ button {
   color: #ffd6d6;
 }
 
+.info {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+
+.backup { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.hint { margin: 0; color: var(--muted); font-size: 0.9rem; line-height: 1.5; }
+
 .empty {
   color: var(--muted);
   text-align: center;
